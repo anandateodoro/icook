@@ -68,6 +68,17 @@ app.post("/postar", function(req, res) {
 	});
 });
 
+//GET posts
+app.get("/get-posts", function(req, res) {
+	getPostsDB(function(answer) {
+		var resposta = {
+			Items: answer
+		}
+
+		res.send(JSON.stringify(resposta));
+	});
+});
+
 /*******************QUERIES********************/
 //Inserir postagem
 function postarDB(post, callback) {
@@ -80,7 +91,17 @@ function postarDB(post, callback) {
 		}
 	});
 }
-
+//Get postagens
+function getPostsDB(callback) {
+	connection.query('SELECT * FROM posts', function(err, rows, fields) {
+		if(!err) {
+			callback(rows);
+		} else {
+			console.log(err);
+			callback(false);
+		}
+	});
+}
 /*************************INICIA SERVIDOR*****************************/
 var port = process.env.PORT || 3000;
 
